@@ -48,8 +48,7 @@ Aynı hassas veri, cihaz işlemi, tarayıcı oturumu veya ağ trafiği olarak fa
 ### 2. The Void
 
 ![Görünürlük ve yaptırım boşluğu](assets/the-void.svg)
-
-**Bu görsel ne anlatıyor?**  
+ 
 “The Void”, Endpoint DLP veya Browser Data Security tarafından doğrudan değerlendirilemeyebilen potansiyel çıkış yollarını temsil eder. Office eklentileri, masaüstü API çağrıları, yönetilmeyen tarayıcılar ve gelen AI yanıtları bu alanda değerlendirilir. Network Data Security, yalnızca trafik desteklenen bir GSA veya SASE/SSE yolu üzerinden geçtiğinde ve gerekli inceleme koşulları sağlandığında bu boşluğu azaltabilir.
 
 ### 3. Office eklentisi veri yolu
