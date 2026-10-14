@@ -4,7 +4,7 @@
 
 > Bir dosyanın USB belleğe kopyalanmasını engellemek veri güvenliğinin yalnızca bir bölümüdür. Aynı veri bir yapay zekâ istemine, Office eklentisine, yerel uygulamaya veya API isteğine dönüştüğünde korumanın farklı bir katmanda devam etmesi gerekir.
 
-!![Genel mimari](../assets/architecture.svg)
+![Genel mimari](../assets/architecture.svg)
 
 *Şekil 1. Endpoint, tarayıcı ve ağ katmanlarının ortak sınıflandırma ve politika amacı altında konumlandırılması.*
 
