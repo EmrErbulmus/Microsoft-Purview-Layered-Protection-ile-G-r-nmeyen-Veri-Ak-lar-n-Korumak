@@ -1,16 +1,26 @@
 # Veri Artık Bir Dosya Değil
 
-## Microsoft Purview Layered Protection ile Endpoint DLP, Browser Data Security ve Network Data Security Katmanlarında Modern Veri Koruma Mimarisi
-
-<p align="center">
-  <img src="assets/emre-erbulmus-logo.png" alt="Emre Erbulmuş" width="700">
-</p>
+## Microsoft Purview Layered Protection ile Görünmeyen Veri Akışlarını Korumak
 
 Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı ve ağ seviyesinde korunmasını; Endpoint DLP'den Browser Data Security'ye ve Network Data Security'ye uzanan yeni nesil veri koruma mimarisinin teknik analizi üzerinden ele alan öğrenme odaklı bir çalışma.
 
-<p align="center">
-  <img src="assets/layered-protection.png" alt="Microsoft Purview Layered Protection" width="1100">
-</p>
+![Microsoft Purview Layered Protection genel mimarisi](assets/architecture.svg)
+
+**Bu görsel ne anlatıyor?**  
+Genel mimari; Endpoint DLP, Browser Data Security ve Network Data Security katmanlarının birbirinin alternatifi olmadığını, farklı veri hareketleri için tamamlayıcı yaptırım noktaları sunduğunu gösterir. Endpoint katmanı cihaz ve işletim sistemi aktivitelerine, tarayıcı katmanı desteklenen web oturumlarına, ağ katmanı ise desteklenen ve yönlendirilmiş HTTP/HTTPS trafiğine odaklanır.
+
+## Neden bu makale?
+
+Birçok kuruluş Endpoint DLP yatırımı sonrasında veri çıkış riskinin büyük ölçüde kontrol edildiğini düşünebilir. Ancak modern veri hareketleri yalnızca USB, yazdırma veya e-posta eki üzerinden gerçekleşmez. Hassas içerik bugün aşağıdaki kanallarda da hareket edebilir:
+
+- Tüketici AI uygulamalarına yazılan veya yapıştırılan istemler
+- AI ve bulut uygulamalarına yüklenen dosyalar
+- Office eklentilerinin oluşturduğu API çağrıları
+- Yerel masaüstü uygulamalarının ağ trafiği
+- Yönetilen SaaS oturumları ve BYOD erişimleri
+- Desteklenen SASE/SSE yollarından geçen gelen ve giden içerik
+
+Bu çalışma, her veri hareketinde doğru kontrol katmanını seçebilmek için kapsam, sınıflandırma, yaptırım, telemetri, PoC ve ürün sınırlamalarını birlikte değerlendirir.
 
 ## Makaleyi oku
 
@@ -20,12 +30,43 @@ Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı v
 
 - Endpoint DLP, Browser Data Security ve Network Data Security rolleri
 - Üç katman arasındaki görünürlük ve yaptırım farkları
-- “The Void” olarak tanımlanan denetim boşluğu
+- “The Void” olarak tanımlanan görünürlük boşluğu
 - Office eklentileri, yerel uygulamalar ve API çağrıları
-- Örnek müşteri PoC tasarımı
-- Politika karar akışı ve kademeli devreye alma
-- Teknik uyarılar, bağımlılıklar ve ürün sınırlamaları
-- GitHub uyumlu Mermaid mimari diyagramları
+- Collection Policy ile DLP enforcement arasındaki ayrım
+- Entra Global Secure Access ve desteklenen SASE/SSE bağımlılıkları
+- Örnek müşteri PoC tasarımı ve başarı kriterleri
+- Kademeli üretim geçişi, izleme ve operasyon modeli
+- Lisanslama, PAYG, teknik uyarılar ve ürün sınırlamaları
+
+## Temel mimari görseller
+
+### 1. Katmanlı koruma yaklaşımı
+
+![Katmanlı veri koruması](assets/layered-protection.svg)
+
+**Bu görsel ne anlatıyor?**  
+Aynı hassas veri, cihaz işlemi, tarayıcı oturumu veya ağ trafiği olarak farklı yollardan hareket edebilir. Bu nedenle koruma modeli tek bir ürün kontrolüne değil, verinin hareket ettiği bağlama göre seçilen tamamlayıcı katmanlara dayanır. Ağ katmanı çevrimdışı cihaz hareketlerinin, Endpoint DLP de API trafiğinin yerine geçmez.
+
+### 2. The Void
+
+![Görünürlük ve yaptırım boşluğu](assets/the-void.svg)
+
+**Bu görsel ne anlatıyor?**  
+“The Void”, Endpoint DLP veya Browser Data Security tarafından doğrudan değerlendirilemeyebilen potansiyel çıkış yollarını temsil eder. Office eklentileri, masaüstü API çağrıları, yönetilmeyen tarayıcılar ve gelen AI yanıtları bu alanda değerlendirilir. Network Data Security, yalnızca trafik desteklenen bir GSA veya SASE/SSE yolu üzerinden geçtiğinde ve gerekli inceleme koşulları sağlandığında bu boşluğu azaltabilir.
+
+### 3. Office eklentisi veri yolu
+
+![Office eklentisi ve harici LLM veri akışı](assets/office-addin.svg)
+
+**Bu görsel ne anlatıyor?**  
+Bir Office eklentisi belge içeriğini arka planda harici bir API'ye gönderebilir. Bu işlem klasik bir USB kopyası değildir ve bir Edge oturumu da oluşturmayabilir. Böyle bir senaryoda desteklenen ağ yolu üzerindeki Network Data Security, sınıflandırma ve yaptırım için birincil kontrol katmanı hâline gelir.
+
+### 4. Kapsama matrisi
+
+![Endpoint Browser ve Network kapsama matrisi](assets/coverage-matrix.svg)
+
+**Bu görsel ne anlatıyor?**  
+Matris, hangi katmanın hangi veri hareketinde güçlü olduğunu özetler. `✓` doğrudan desteği, `◐` koşula bağlı veya kısmi desteği, `—` ise doğrudan uygulanabilir bir kontrol bulunmadığını gösterir. Koşullu yetenekler cihaz yönetimine, tarayıcıya, uzantıya, ağ ajanına, trafik yönlendirmesine ve entegrasyon sağlayıcısına bağlı olabilir.
 
 ## Depo yapısı
 
@@ -35,12 +76,11 @@ Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı v
 ├── docs
 │   └── article.md
 └── assets
-    ├── emre-erbulmus-logo.png
-    ├── architecture.png
-    ├── layered-protection.png
-    ├── the-void.png
-    ├── office-addin.png
-    └── coverage-matrix.png
+    ├── architecture.svg
+    ├── layered-protection.svg
+    ├── the-void.svg
+    ├── office-addin.svg
+    └── coverage-matrix.svg
 ```
 
 ## Yazar
@@ -48,7 +88,7 @@ Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı v
 **Emre Erbulmuş**  
 Microsoft Purview, Data Loss Prevention, Information Protection ve veri güvenliği mimarileri üzerine çalışmalar yürütmektedir.
 
-[emreerbulmus.com](https://www.emreerbulmus.com)
+[Emre Erbulmuş web sitesi](https://www.emreerbulmus.com)
 
 ## Kullanım notu
 

@@ -4,7 +4,9 @@
 
 > Bir dosyanın USB belleğe kopyalanmasını engellemek veri güvenliğinin yalnızca bir bölümüdür. Aynı veri bir yapay zekâ istemine, Office eklentisine, yerel uygulamaya veya API isteğine dönüştüğünde korumanın farklı bir katmanda devam etmesi gerekir.
 
-![Genel mimari](../assets/architecture.png)
+!![Genel mimari](../assets/architecture.svg)
+
+*Şekil 1. Endpoint, tarayıcı ve ağ katmanlarının ortak sınıflandırma ve politika amacı altında konumlandırılması.*
 
 > [!NOTE]
 > Bu makale teknik öğrenme ve mimari değerlendirme amacıyla hazırlanmıştır. Ürün özellikleri, lisans gereksinimleri, desteklenen uygulamalar ve önizleme durumları değişebileceği için üretim tasarımından önce güncel Microsoft belgeleri doğrulanmalıdır.
@@ -54,7 +56,20 @@ flowchart LR
 
 Bu yaklaşımda katmanlar birbirinin yerine geçmez. Her katman farklı bir etkinlik bağlamına ve yaptırım noktasına sahiptir.
 
-![Katmanlı koruma görünümü](../assets/layered-protection.png)
+Katmanlı tasarımın teknik hedefi, aynı sınıflandırma amacını farklı enforcement noktalarına taşımaktır. Örneğin aynı “Çok Gizli” etiketli dosya USB'ye kopyalanırken Endpoint DLP tarafından, yönetilen Edge oturumunda bir AI servisine yüklenirken Browser Data Security tarafından, Office eklentisinin oluşturduğu desteklenen API trafiğinde ise Network Data Security tarafından değerlendirilebilir. Ancak bu tutarlılık otomatik değildir. Kullanıcı kapsamı, uygulama kapsamı, veri sınıflandırması, trafik yönlendirmesi, politika modu ve lisanslama her katmanda ayrı doğrulanmalıdır.
+
+Bu nedenle müşteri tasarımında yalnızca “DLP politikamız var mı?” sorusu yeterli değildir. Aşağıdaki sorular da cevaplanmalıdır:
+
+- Hassas veriyi hangi sınıflandırma mekanizması tanıyacak?
+- Veri hangi cihaz, uygulama, tarayıcı ve ağ yollarından hareket edebilir?
+- Her yolda görünürlük mü, denetim mi, uyarı mı, yoksa kesin engelleme mi bekleniyor?
+- Olay hangi portal veya günlük üzerinden doğrulanacak?
+- Bir katman devre dışı kaldığında hangi artık risk kalacak?
+
+
+!![Katmanlı koruma görünümü](../assets/layered-protection.svg)
+
+*Şekil 2. Aynı hassas verinin farklı hareket kanallarında tamamlayıcı kontrollerle korunması.*
 
 ---
 
@@ -95,7 +110,9 @@ Kullanıcı aynı içeriği bir tüketici yapay zekâ uygulamasının web arayü
 
 Kullanıcı belgeyi Word içinde açar ve üçüncü taraf bir eklentiyle özetletir. Eklenti belge içeriğini bir API çağrısına dönüştürebilir. Kullanıcı tarayıcı açmamış ve USB kullanmamıştır. Böyle bir desen, cihaz ve tarayıcı denetimlerinin dışında kalabilecek bir ağ akışı oluşturabilir.
 
-![Office eklentisi ve API akışı](../assets/office-addin.png)
+!![Office eklentisi ve API akışı](../assets/office-addin.svg)
+
+*Şekil 3. Office eklentisinin harici LLM servisine yaptığı API çağrısında ağ katmanının konumu.*
 
 ```mermaid
 sequenceDiagram
@@ -158,11 +175,26 @@ Tasarım sırasında şu konular netleştirilmelidir:
 - Kullanıcıya gösterilecek politika mesajı
 - Gerekçeli geçersiz kılma ve istisna süreci
 
+Browser Data Security iki farklı güven modelinde ele alınmalıdır. Yönetilen cihaz üzerindeki yönetilmeyen uygulama senaryosunda cihazın Intune tarafından yönetilmesi, desteklenen Edge sürümü, doğru Purview kapsamı ve gerekli yapılandırma ilkeleri önemlidir. Yönetilmeyen cihaz üzerindeki yönetilen uygulama senaryosunda ise Entra Conditional Access, yönetilen uygulama, Edge for Business çalışma profili ve oturum denetimleri birlikte tasarlanır.
+
+Tarayıcı katmanının güçlü yanı, içeriği gönderimden önce oturum bağlamında değerlendirebilmesidir. Ancak bu, her tarayıcının veya her uygulamanın aynı seviyede desteklendiği anlamına gelmez. Chrome veya Firefox için uzantı ve yönlendirme davranışları, yönetilen Edge oturumundaki inline içerik denetimiyle aynı kabul edilmemelidir. PoC sırasında “hangi tarayıcı, hangi uygulama, hangi aktivite ve hangi kullanıcı deneyimi?” soruları ayrı test vakaları olarak ele alınmalıdır.
+
 ### 3.3 Network Data Security
 
 Network Data Security, veri hareketini ağ üzerinden değerlendiren katmandır. Özellikle tarayıcı dışı uygulamalar, eklentiler, API tabanlı iletişim ve desteklenen yerel uygulama trafiği için önem kazanır.
 
 Bu katmanın çalışması yalnızca Purview politikasına bağlı değildir. Trafiğin desteklenen bir ağ güvenliği mimarisinden geçirilmesi ve gerekli entegrasyonların sağlanması gerekir. Üçüncü taraf SASE veya proxy çözümü kullanılıyorsa yetenek kullanılabilirliği ilgili sağlayıcıyla doğrulanmalıdır.
+
+Network Data Security tasarımında en az dört teknik düzlem birlikte değerlendirilmelidir:
+
+1. **Trafik yönlendirme:** İlgili internet veya uygulama trafiği Entra Global Secure Access istemcisi ya da desteklenen üçüncü taraf SASE/SSE yolu üzerinden geçmelidir.
+2. **TLS inceleme:** Şifreli trafiğin içerik düzeyinde değerlendirilebilmesi için TLS inspection tasarımı, sertifika güveni, istisnalar ve certificate pinning kullanan uygulamalar ele alınmalıdır.
+3. **İçerik politikası:** Ağ güvenliği katmanı hangi hedef ve aktivitenin Purview değerlendirmesine gönderileceğini belirlemelidir. Her trafik akışının Purview'a gönderilmesi performans, maliyet ve gizlilik açısından doğru olmayabilir.
+4. **Purview verdict:** Aktif DLP kuralı, sınıflandırma sonucu ve politika aksiyonu birlikte değerlendirilerek audit veya block kararı üretilir.
+
+Entra Global Secure Access ile Purview kullanıldığında traffic forwarding profile, TLS inspection policy, content policy, security profile ve Conditional Access ilişkisi uçtan uca test edilmelidir. Üçüncü taraf SASE/SSE entegrasyonlarında ise desteklenen aktiviteler, bildirim davranışı ve enforcement seviyeleri sağlayıcının entegrasyon derinliğine bağlıdır.
+
+Ağ katmanının güçlü olduğu nokta, tarayıcı oturumu bulunmayan API ve yerel uygulama trafiğine erişebilmesidir. Buna karşılık USB, yerel yazdırma ve çevrimdışı dosya hareketleri ağ üzerinde oluşmadığından Network Data Security tarafından görülemez. Bu sınır, katmanlı mimarinin neden gerekli olduğunu açıkça gösterir.
 
 ```mermaid
 flowchart TB
@@ -201,7 +233,9 @@ flowchart TB
 
 “The Void”, tek bir koruma katmanının göremediği veya eylem uygulayamadığı veri çıkış noktalarını anlatan mimari bir kavramdır. Temel risk, ürünün hiç çalışmaması değil, kurumun mevcut kapsamı olduğundan daha geniş varsaymasıdır.
 
-![The Void görünürlük boşluğu](../assets/the-void.png)
+!![The Void görünürlük boşluğu](../assets/the-void.svg)
+
+*Şekil 4. Endpoint ve tarayıcı kontrollerinin doğrudan kapsamadığı potansiyel veri çıkış yolları.*
 
 Örnek boşluklar:
 
@@ -227,7 +261,28 @@ flowchart LR
     H --> I["Kapsam, entegrasyon ve telemetriyi yeniden değerlendir"]
 ```
 
-Müşteri tasarımında bu kavramın karşılığı bir **coverage mapping** çalışmasıdır. Kritik veri türleri satırlara, veri çıkış kanalları sütunlara yazılır. Her hücre için hangi kontrolün görünürlük sağladığı, hangi aksiyonun uygulanabildiği ve olayın nerede doğrulanacağı belirlenir.
+### The Void neden oluşur?
+
+Görünürlük boşluğu çoğu zaman tek bir ürün hatasından değil, veri hareketi ile enforcement noktasının uyuşmamasından oluşur. Endpoint DLP dosyanın cihaz üzerindeki hareketini değerlendirebilir, fakat eklentinin süreç içinden oluşturduğu API çağrısını dosya kopyalama aktivitesi olarak görmeyebilir. Browser Data Security tarayıcı oturumunda güçlüdür, fakat yerel uygulamanın arka plan HTTPS çağrısında Edge oturumu bulunmaz. Network Data Security bu trafiği değerlendirebilir, ancak trafik desteklenen yoldan geçmiyorsa veya TLS içeriği incelenemiyorsa görünürlük yine oluşmaz.
+
+Bu nedenle “The Void” sabit bir ürün listesi değildir. Kurumun cihaz yönetimi, uygulama portföyü, tarayıcı standardı, ağ mimarisi, şifreleme yaklaşımı ve entegrasyon kapsamına göre değişen bir risk alanıdır.
+
+### Coverage mapping nasıl yapılmalıdır?
+
+Müşteri tasarımında bu kavramın karşılığı bir **coverage mapping** çalışmasıdır. Kritik veri türleri satırlara, veri çıkış kanalları sütunlara yazılır. Her hücre için aşağıdaki bilgiler kaydedilir:
+
+- Veri türü, etiket veya SIT
+- Kaynak cihaz ve yönetim durumu
+- Kullanılan uygulama ve tarayıcı
+- Hedef servis veya domain
+- Beklenen kontrol katmanı
+- Beklenen politika aksiyonu
+- Gerekli lisans ve teknik ön koşul
+- Olayın doğrulanacağı portal veya günlük
+- Negatif test ve bypass testi
+- Kontrol uygulanamazsa kalan artık risk
+
+Coverage mapping çalışmasının çıktısı, yalnızca “covered” veya “not covered” olmamalıdır. “Koşullu”, “önizleme”, “sağlayıcıya bağlı”, “yalnızca audit” ve “yalnızca yönetilen cihaz” gibi durumlar açıkça işaretlenmelidir. Böylece PoC sonucunun üretim kapsamıymış gibi yorumlanması engellenir.
 
 ---
 
@@ -269,7 +324,9 @@ flowchart TD
 
 ## 6. Kapsama matrisi
 
-![Katmanlar arası kapsama matrisi](../assets/coverage-matrix.png)
+!![Katmanlar arası kapsama matrisi](../assets/coverage-matrix.svg)
+
+*Şekil 5. Endpoint, Browser ve Network katmanlarının basitleştirilmiş yetenek karşılaştırması.*
 
 Aşağıdaki tablo kavramsal tasarım içindir. Kesin ürün desteği olarak kullanılmamalı ve güncel resmi belgelerle doğrulanmalıdır.
 
@@ -396,51 +453,119 @@ Operasyon prosedüründe en az şu bilgiler yer almalıdır:
 
 ---
 
-## 10. Teknik uyarılar ve ürün sınırlamaları
+## 10. Collection Policies: Telemetri Toplama ile Enforcement Arasındaki Ayrım
 
-### 10.1 Tek katman tam kapsama sağlamaz
+Collection Policy, DLP engelleme politikasının eş anlamlısı değildir. Collection Policy'nin amacı hangi etkinliklerin Purview sinyal ve audit akışına alınacağını belirlemektir. DLP policy ise belirli koşullar altında kullanıcı aktivitesine uygulanacak denetim, uyarı veya engelleme kararını yönetir.
+
+Bu ayrım mimari açıdan kritiktir:
+
+- **Collection plane**, hangi olayın toplanacağını ve aşağı akış çözümlerine sunulacağını belirler.
+- **Enforcement plane**, kullanıcı aktivitesi gerçekleşirken izin, audit veya block kararını uygular.
+- Bir olayın Collection Policy tarafından filtrelenmesi, DLP yaptırımının otomatik olarak devre dışı kaldığı anlamına gelmez.
+- Buna karşılık toplanmayan bir olay Activity Explorer, Insider Risk Management veya audit tabanlı başka deneyimlerde görünmeyebilir.
+
+### Collection Policy değerlendirme mantığı
+
+Bir collection event temel olarak koşul, aktivite ve veri kaynağı bağlamından oluşur. Örneğin “içerik belirli bir SIT içeriyor” koşulu ile “dosya çıkarılabilir medyaya kopyalandı” aktivitesi aynı olay tanımında değerlendirilebilir. Eşleşen olay signal store'a alınır; eşleşmeyen olay ingestion öncesinde elenir.
+
+Bu yaklaşımın faydaları şunlardır:
+
+- Gereksiz olay hacmini ve analist gürültüsünü azaltmak
+- Yalnızca belirli veri türleri veya aktiviteler için odaklı telemetri toplamak
+- Activity Explorer ve diğer tüketici çözümlerine daha anlamlı sinyal sağlamak
+- AI, browser, network ve device kaynaklarını kontrollü biçimde kapsama almak
+
+### Operasyonel uyarılar
+
+Device collection politikaları tasarlanırken Endpoint DLP ayarlarında cihaz dosya aktivitelerinin audit edilmesi için gerekli yapılandırma doğrulanmalıdır. Ayrıca Insider Risk Management cihaz göstergeleriyle olası etkileşimler incelenmelidir. Collection Policy tarafından elenen bir olayın aşağı akış çözümünde görünmeyeceği unutulmamalıdır.
+
+Collection Policy devreye alınmadan önce aşağıdaki sorular cevaplanmalıdır:
+
+1. Hangi veri kaynağından olay toplanacak?
+2. Hangi koşul ve aktivite kombinasyonu değerli bir sinyal oluşturuyor?
+3. Toplanan sinyali hangi çözüm tüketecek?
+4. Filtreleme, mevcut IRM veya eDiscovery görünürlüğünü azaltıyor mu?
+5. PAYG destekli bir kaynak veya koruma yolu etkinleşiyor mu?
+
+---
+
+## 11. Lisanslama ve Maliyet Modelinin Mimariye Etkisi
+
+Lisanslama, katmanlı koruma tasarımından sonra kontrol edilecek ayrı bir idari konu değildir. Hangi katmanın hangi kullanıcı, cihaz, uygulama ve trafik üzerinde çalışabileceğini doğrudan etkileyen bir mimari girdidir.
+
+### Endpoint DLP
+
+Endpoint DLP yetkileri uygun Microsoft 365 ve Purview lisanslarına bağlıdır. Intune ve Entra ID, cihaz yönetimi ve kullanıcı kimliği bağlamı açısından tasarımın parçasıdır. OCR veya on-demand classification gibi bazı ek hizmetler tüketim bazlı olabilir.
+
+### Browser Data Security
+
+Yönetilen bulut uygulamaları ile yönetilmeyen tüketici AI uygulamaları aynı maliyet modeline sahip olmayabilir. Yönetilen uygulama senaryoları uygun lisans kapsamında olabilirken, yönetilmeyen AI uygulamalarında inline koruma PAYG metriğini kullanabilir. Edge for Business, Intune, Entra Conditional Access ve Defender for Cloud Apps bağımlılıkları senaryoya göre ayrıca doğrulanmalıdır.
+
+### Network Data Security
+
+Network Data Security için Purview DLP tarafına ek olarak desteklenen bir ağ güvenliği yolu gerekir. Bu, Entra Internet Access veya Entra Suite kapsamındaki Global Secure Access bileşenleri ya da Purview entegrasyonu sağlayan üçüncü taraf SASE/SSE çözümü olabilir. Routed traffic üzerinde inline değerlendirme PAYG maliyeti oluşturabilir.
+
+### Tasarım önerisi
+
+PoC başlamadan önce bir lisans ve tüketim matrisi hazırlanmalıdır. En az aşağıdaki alanlar yer almalıdır:
+
+- Kullanıcı ve cihaz sayısı
+- Kullanılan kontrol katmanı
+- Gerekli temel lisans
+- PAYG ile ölçülen aktivite
+- GSA veya üçüncü taraf SASE/SSE maliyeti
+- Veri toplama ve saklama beklentisi
+- Pilot ve üretim için ayrı tüketim tahmini
+
+Lisanslama ve ürün kapsamı değişebileceğinden nihai tasarım, güncel Microsoft Product Terms, Purview service description, PAYG belgeleri ve ilgili SASE sağlayıcısının destek dokümanlarıyla doğrulanmalıdır.
+
+---
+
+## 12. Teknik uyarılar ve ürün sınırlamaları
+
+### 12.1 Tek katman tam kapsama sağlamaz
 
 Endpoint, tarayıcı ve ağ katmanları farklı telemetri ve yaptırım noktalarına sahiptir. Bir katmanın devreye alınması diğer katmanların bağlamını otomatik olarak oluşturmaz.
 
-### 10.2 Destek matrisi değişebilir
+### 12.2 Destek matrisi değişebilir
 
 Desteklenen tarayıcılar, uygulamalar, eylemler, SASE sağlayıcıları ve politika seçenekleri ürün sürümüne göre değişebilir.
 
-### 10.3 Şifreli trafik görünürlüğü otomatik değildir
+### 12.3 Şifreli trafik görünürlüğü otomatik değildir
 
 HTTPS içeriğinin değerlendirilmesi trafik yönlendirme ve inceleme mimarisine bağlıdır. Sertifika dağıtımı, TLS istisnaları, certificate pinning, gizlilik ve mevzuat gereksinimleri ayrıca değerlendirilmelidir.
 
-### 10.4 Sınıflandırma kalitesi yaptırım kalitesini belirler
+### 12.4 Sınıflandırma kalitesi yaptırım kalitesini belirler
 
 Hatalı SIT, aşırı geniş eşik veya düşük kaliteli anahtar kelime mantığı yüksek yanlış pozitif üretebilir. Engelleme öncesinde pozitif ve negatif test setleriyle doğrulama yapılmalıdır.
 
-### 10.5 Etiket tek başına yeterli olmayabilir
+### 12.5 Etiket tek başına yeterli olmayabilir
 
 Etiketlenmemiş veya desteklenmeyen dosya biçimindeki hassas içerik için içerik tabanlı denetim gerekebilir.
 
-### 10.6 BYOD ayrı bir güven modelidir
+### 12.6 BYOD ayrı bir güven modelidir
 
 Kişisel cihazlarda kurumsal cihazla aynı ajan ve kontrol düzeyi bulunmayabilir. Kimlik, koşullu erişim, yönetilen tarayıcı ve oturum kontrolleri birlikte düşünülmelidir.
 
-### 10.7 Network Data Security her trafiği otomatik olarak çözmez
+### 12.7 Network Data Security her trafiği otomatik olarak çözmez
 
 Trafiğin görülmesi, içeriğin her koşulda sınıflandırılabileceği veya her uygulamada engellenebileceği anlamına gelmez. Protokol, şifreleme, uygulama davranışı ve entegrasyon sınırları PoC ile doğrulanmalıdır.
 
-### 10.8 Lisanslama tasarımın parçasıdır
+### 12.8 Lisanslama tasarımın parçasıdır
 
 Purview, Entra ve üçüncü taraf ağ güvenliği bileşenlerinin lisans gereksinimleri farklı olabilir. Güncel ürün koşulları ve fiyatlandırma doğrulanmalıdır.
 
-### 10.9 Telemetri toplama ile yaptırım aynı değildir
+### 12.9 Telemetri toplama ile yaptırım aynı değildir
 
 Bir aktivitenin raporlanması, aynı kanal üzerinde engelleme uygulanabileceği anlamına gelmeyebilir. PoC başarı kriterleri görünürlük ve yaptırım olarak ayrı yazılmalıdır.
 
-### 10.10 Gizlilik ve çalışan izleme
+### 12.10 Gizlilik ve çalışan izleme
 
 Kullanıcı aktivitelerinin incelenmesi; yerel mevzuat, bilgilendirme, veri minimizasyonu ve rol tabanlı erişim gereksinimleriyle birlikte ele alınmalıdır.
 
 ---
 
-## 11. Sonuç
+## 13. Sonuç
 
 Microsoft Purview Layered Protection yalnızca yeni bir DLP özelliği olarak değerlendirilmemelidir. Yaklaşımın asıl değeri, veri güvenliği problemini dosya merkezli bakıştan kanal ve akış merkezli bakışa taşımasıdır.
 
