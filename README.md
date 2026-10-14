@@ -1,6 +1,6 @@
-# Veri Artık Bir Dosya Değil
-
 ## Microsoft Purview Layered Protection ile Görünmeyen Veri Akışlarını Korumak
+
+# Veri Artık Bir Dosya Değil
 
 Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı ve ağ seviyesinde korunmasını; Endpoint DLP'den Browser Data Security'ye ve Network Data Security'ye uzanan yeni nesil veri koruma mimarisinin teknik analizi üzerinden ele alan öğrenme odaklı bir çalışma.
 
