@@ -25,7 +25,7 @@ Bu çalışma, her veri hareketinde doğru kontrol katmanını seçebilmek için
 
 ➡️ **[Teknik makaleyi aç](docs/article.md)**
 
-## Makalenin kapsamı
+## Purview Layered Protection Makalenin kapsamı
 
 - Endpoint DLP, Browser Data Security ve Network Data Security rolleri
 - Üç katman arasındaki görünürlük ve yaptırım farkları
