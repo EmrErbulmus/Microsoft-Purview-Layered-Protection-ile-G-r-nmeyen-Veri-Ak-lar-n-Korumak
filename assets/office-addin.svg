@@ -7,4 +7,33 @@ text{font-family:"Segoe UI",Arial,sans-serif;fill:#243A5E}.title{font-size:30px;
 <rect x="1040" y="170" width="280" height="100" rx="10" class="box"/><text x="1180" y="210" text-anchor="middle" class="h">Harici LLM servisi</text><text x="1180" y="240" text-anchor="middle" class="s">Bulut hedefi</text>
 <path d="M320 220 H385 M640 220 H705 M960 220 H1025" class="line" marker-end="url(#arrow)"/>
 <rect x="585" y="355" width="510" height="118" rx="10" class="blue"/><text x="840" y="395" text-anchor="middle" class="h">Network Data Security yaptırım noktası</text><text x="840" y="425" text-anchor="middle" class="b">Desteklenen ve yönlendirilmiş trafikte sınıflandırma + verdict</text><text x="840" y="452" text-anchor="middle" class="s">GSA veya desteklenen üçüncü taraf SASE/SSE entegrasyonu gerekir.</text><path d="M840 355 V285" class="line" marker-end="url(#arrow)"/>
-<rect x="150" y="545" width="1100" height="122" rx="10" class="box"/><text x="190" y="585" class="h">Katman değerlendirmesi</text><text x="190" y="622" class="b">Endpoint DLP:</text><text x="345" y="622" class="s">Eklentinin outbound API çağrısında doğrudan politika eşleşmesi yok.</text><text x="695" y="622" class="b">Browser DS:</text><text x="825" y="622" class="s">Edge oturumu bulunmadığı için uygulanmaz.</text><text x="190" y="652" class="b">Network DS:</text><text x="345" y="652" class="s">Desteklenen ağ yolunda bu senaryonun birincil kontrolüdür.</text></svg>
+<rect x="150" y="545" width="1100" height="145" rx="10" class="box"/>
+
+<text x="190" y="585" class="h">
+Katman değerlendirmesi
+</text>
+
+<text x="190" y="620" class="b">
+Endpoint DLP:
+</text>
+
+<text x="320" y="620" class="s">
+Eklentinin outbound API çağrısını doğrudan değerlendiremez.
+</text>
+
+<text x="190" y="645" class="b">
+Browser DS:
+</text>
+
+<text x="320" y="645" class="s">
+Edge oturumu bulunmadığı için uygulanamaz.
+</text>
+
+<text x="190" y="670" class="b">
+Network DS:
+</text>
+
+<text x="320" y="670" class="s">
+Desteklenen ağ yolunda birincil kontrol katmanıdır.
+</text>
+</svg>
