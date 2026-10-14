@@ -4,9 +4,7 @@
 
 > Bir dosyanın USB belleğe kopyalanmasını engellemek veri güvenliğinin yalnızca bir bölümüdür. Aynı veri bir yapay zekâ istemine, Office eklentisine, yerel uygulamaya veya API isteğine dönüştüğünde korumanın farklı bir katmanda devam etmesi gerekir.
 
-!![Genel mimari](../assets/architecture.svg)
-
-*Şekil 1. Endpoint, tarayıcı ve ağ katmanlarının ortak sınıflandırma ve politika amacı altında konumlandırılması.*
+![Genel mimari](../assets/architecture.png)
 
 > [!NOTE]
 > Bu makale teknik öğrenme ve mimari değerlendirme amacıyla hazırlanmıştır. Ürün özellikleri, lisans gereksinimleri, desteklenen uygulamalar ve önizleme durumları değişebileceği için üretim tasarımından önce güncel Microsoft belgeleri doğrulanmalıdır.
@@ -56,9 +54,7 @@ flowchart LR
 
 Bu yaklaşımda katmanlar birbirinin yerine geçmez. Her katman farklı bir etkinlik bağlamına ve yaptırım noktasına sahiptir.
 
-!![Katmanlı koruma görünümü](../assets/layered-protection.svg)
-
-*Şekil 2. Aynı hassas verinin farklı hareket kanallarında tamamlayıcı kontrollerle korunması.*
+![Katmanlı koruma görünümü](../assets/layered-protection.png)
 
 ---
 
@@ -99,9 +95,7 @@ Kullanıcı aynı içeriği bir tüketici yapay zekâ uygulamasının web arayü
 
 Kullanıcı belgeyi Word içinde açar ve üçüncü taraf bir eklentiyle özetletir. Eklenti belge içeriğini bir API çağrısına dönüştürebilir. Kullanıcı tarayıcı açmamış ve USB kullanmamıştır. Böyle bir desen, cihaz ve tarayıcı denetimlerinin dışında kalabilecek bir ağ akışı oluşturabilir.
 
-!![Office eklentisi ve API akışı](../assets/office-addin.svg)
-
-*Şekil 3. Office eklentisinin harici LLM servisine yaptığı API çağrısında ağ katmanının konumu.*
+![Office eklentisi ve API akışı](../assets/office-addin.png)
 
 ```mermaid
 sequenceDiagram
@@ -207,9 +201,7 @@ flowchart TB
 
 “The Void”, tek bir koruma katmanının göremediği veya eylem uygulayamadığı veri çıkış noktalarını anlatan mimari bir kavramdır. Temel risk, ürünün hiç çalışmaması değil, kurumun mevcut kapsamı olduğundan daha geniş varsaymasıdır.
 
-!![The Void görünürlük boşluğu](../assets/the-void.svg)
-
-*Şekil 4. Endpoint ve tarayıcı kontrollerinin doğrudan kapsamadığı potansiyel veri çıkış yolları.*
+![The Void görünürlük boşluğu](../assets/the-void.png)
 
 Örnek boşluklar:
 
@@ -277,9 +269,7 @@ flowchart TD
 
 ## 6. Kapsama matrisi
 
-!![Katmanlar arası kapsama matrisi](../assets/coverage-matrix.svg)
-
-*Şekil 5. Endpoint, Browser ve Network katmanlarının basitleştirilmiş yetenek karşılaştırması.*
+![Katmanlar arası kapsama matrisi](../assets/coverage-matrix.png)
 
 Aşağıdaki tablo kavramsal tasarım içindir. Kesin ürün desteği olarak kullanılmamalı ve güncel resmi belgelerle doğrulanmalıdır.
 

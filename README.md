@@ -2,9 +2,15 @@
 
 ## Microsoft Purview Layered Protection ile Endpoint DLP, Browser Data Security ve Network Data Security Katmanlarında Modern Veri Koruma Mimarisi
 
+<p align="center">
+  <img src="assets/emre-erbulmus-logo.png" alt="Emre Erbulmuş" width="700">
+</p>
+
 Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı ve ağ seviyesinde korunmasını; Endpoint DLP'den Browser Data Security'ye ve Network Data Security'ye uzanan yeni nesil veri koruma mimarisinin teknik analizi üzerinden ele alan öğrenme odaklı bir çalışma.
 
-![Microsoft Purview Layered Protection genel mimarisi](assets/architecture.svg)
+<p align="center">
+  <img src="assets/layered-protection.png" alt="Microsoft Purview Layered Protection" width="1100">
+</p>
 
 ## Makaleyi oku
 
@@ -19,25 +25,7 @@ Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı v
 - Örnek müşteri PoC tasarımı
 - Politika karar akışı ve kademeli devreye alma
 - Teknik uyarılar, bağımlılıklar ve ürün sınırlamaları
-- GitHub uyumlu Mermaid ve SVG mimari diyagramları
-
-## Temel mimari görseller
-
-### Katmanlı koruma yaklaşımı
-
-![Katmanlı veri koruması](assets/layered-protection.svg)
-
-### The Void
-
-![Görünürlük ve yaptırım boşluğu](assets/the-void.svg)
-
-### Office eklentisi veri yolu
-
-![Office eklentisi ve harici LLM veri akışı](assets/office-addin.svg)
-
-### Kapsama matrisi
-
-![Endpoint Browser ve Network kapsama matrisi](assets/coverage-matrix.svg)
+- GitHub uyumlu Mermaid mimari diyagramları
 
 ## Depo yapısı
 
@@ -47,11 +35,12 @@ Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı v
 ├── docs
 │   └── article.md
 └── assets
-    ├── architecture.svg
-    ├── layered-protection.svg
-    ├── the-void.svg
-    ├── office-addin.svg
-    └── coverage-matrix.svg
+    ├── emre-erbulmus-logo.png
+    ├── architecture.png
+    ├── layered-protection.png
+    ├── the-void.png
+    ├── office-addin.png
+    └── coverage-matrix.png
 ```
 
 ## Yazar
