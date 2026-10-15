@@ -43,7 +43,7 @@ Bu çalışma, her veri hareketinde doğru kontrol katmanını seçebilmek için
 
 ![Katmanlı veri koruması](assets/layered-protection.svg)
  
-Aynı hassas veri, cihaz işlemi, tarayıcı oturumu veya ağ trafiği olarak farklı yollardan hareket edebilir. Bu nedenle koruma modeli tek bir ürün kontrolüne değil, verinin hareket ettiği bağlama göre seçilen tamamlayıcı katmanlara dayanır. Ağ katmanı çevrimdışı cihaz hareketlerinin, Endpoint DLP de API trafiğinin yerine geçmez.
+Aynı hassas veri; kullanıcı işlemleri, tarayıcı oturumları, bulut uygulamaları veya ağ trafiği üzerinden farklı kanallarla hareket edebilir. Bu nedenle modern veri koruma yaklaşımı, tek bir güvenlik kontrolüne bağımlı olmak yerine verinin bulunduğu konum, kullanım şekli ve hareket ettiği kanala göre devreye giren katmanlı koruma mekanizmalarına dayanır. Her katman farklı bir görünürlük ve denetim noktası sağlayarak diğer katmanların eksik bıraktığı senaryoları tamamlar. Bu kapsamda Network Data Security, cihaz üzerinde gerçekleşen kullanıcı aktivitelerini gözlemleyemezken; Endpoint DLP de ağ seviyesindeki tüm veri akışlarını veya hizmetler arası trafiği tek başına kapsayamaz. Etkin bir veri güvenliği stratejisi, bu teknolojilerin birbirinin yerine geçmesi üzerine değil, birlikte çalışarak uçtan uca koruma sağlaması üzerine tasarlanır.
 
 ### 2. The Void
 
