@@ -1,4 +1,4 @@
-                                                                        # Veri Artık Bir Dosya Değil
+# Veri Artık Bir Dosya Değil
 
 ## Microsoft Purview Layered Protection ile Endpoint DLP, Browser Data Security ve Network Data Security Katmanlarında Modern Veri Koruma Mimarisi
 
