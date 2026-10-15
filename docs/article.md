@@ -136,6 +136,7 @@ sequenceDiagram
         A-->>U: Özet görüntülenir
     end
 ```
+Kullanıcı, Office uygulaması içerisindeki hassas bir belgeyi yapay zeka eklentisi ile özetlemek istediğinde, belge içeriği bir API çağrısı aracılığıyla harici AI servisine gönderilmek üzere hazırlanır. Bu trafik ağ güvenlik katmanından geçerken içerik sınıflandırılır ve veri koruma politikaları değerlendirilir. Eğer hassas veri nedeniyle bir DLP veya veri güvenliği politikası eşleşirse istek engellenir ve belge içeriği dış servise gönderilemez. Politika ihlali tespit edilmezse trafik harici AI servisine iletilir, yanıt alınır ve özet kullanıcıya gösterilir. Bu senaryoda birincil kontrol noktası Endpoint DLP veya Browser Data Security değil, API trafiğini inceleyen Network Data Security katmanıdır.
 
 > [!IMPORTANT]
 > Bu akış kavramsaldır. Gerçek görünürlük; desteklenen uygulamaya, trafik yönlendirmesine, şifreli trafik işleme yaklaşımına, kullanılan SASE veya proxy entegrasyonuna ve güncel ürün destek matrisine bağlıdır.
