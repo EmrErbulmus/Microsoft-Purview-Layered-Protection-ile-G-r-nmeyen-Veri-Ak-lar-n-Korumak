@@ -1,5 +1,3 @@
-# Veri Artık Bir Dosya Değil
-
 ## Microsoft Purview Layered Protection ile Endpoint DLP, Browser Data Security ve Network Data Security Katmanlarında Modern Veri Koruma Mimarisi
 
 > Bir dosyanın USB belleğe kopyalanmasını engellemek veri güvenliğinin yalnızca bir bölümüdür. Aynı veri bir yapay zekâ istemine, Office eklentisine, yerel uygulamaya veya API isteğine dönüştüğünde korumanın farklı bir katmanda devam etmesi gerekir.
