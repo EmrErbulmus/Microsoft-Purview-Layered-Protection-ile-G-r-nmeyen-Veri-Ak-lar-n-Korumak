@@ -67,7 +67,7 @@ Bu nedenle müşteri tasarımında yalnızca “DLP politikamız var mı?” sor
 - Bir katman devre dışı kaldığında hangi artık risk kalacak?
 
 
-!![Katmanlı koruma görünümü](../assets/layered-protection.svg)
+![Katmanlı koruma görünümü](../assets/layered-protection.svg)
 
 *Şekil 2. Aynı hassas verinin farklı hareket kanallarında tamamlayıcı kontrollerle korunması.*
 
@@ -110,7 +110,7 @@ Kullanıcı aynı içeriği bir tüketici yapay zekâ uygulamasının web arayü
 
 Kullanıcı belgeyi Word içinde açar ve üçüncü taraf bir eklentiyle özetletir. Eklenti belge içeriğini bir API çağrısına dönüştürebilir. Kullanıcı tarayıcı açmamış ve USB kullanmamıştır. Böyle bir desen, cihaz ve tarayıcı denetimlerinin dışında kalabilecek bir ağ akışı oluşturabilir.
 
-!![Office eklentisi ve API akışı](../assets/office-addin.svg)
+![Office eklentisi ve API akışı](../assets/office-addin.svg)
 
 *Şekil 3. Office eklentisinin harici LLM servisine yaptığı API çağrısında ağ katmanının konumu.*
 
@@ -233,7 +233,7 @@ flowchart TB
 
 “The Void”, tek bir koruma katmanının göremediği veya eylem uygulayamadığı veri çıkış noktalarını anlatan mimari bir kavramdır. Temel risk, ürünün hiç çalışmaması değil, kurumun mevcut kapsamı olduğundan daha geniş varsaymasıdır.
 
-!![The Void görünürlük boşluğu](../assets/the-void.svg)
+![The Void görünürlük boşluğu](../assets/the-void.svg)
 
 *Şekil 4. Endpoint ve tarayıcı kontrollerinin doğrudan kapsamadığı potansiyel veri çıkış yolları.*
 
@@ -324,7 +324,7 @@ flowchart TD
 
 ## 6. Kapsama matrisi
 
-!![Katmanlar arası kapsama matrisi](../assets/coverage-matrix.svg)
+![Katmanlar arası kapsama matrisi](../assets/coverage-matrix.svg)
 
 *Şekil 5. Endpoint, Browser ve Network katmanlarının basitleştirilmiş yetenek karşılaştırması.*
 
