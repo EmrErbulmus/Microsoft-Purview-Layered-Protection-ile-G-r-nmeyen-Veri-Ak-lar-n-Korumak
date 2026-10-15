@@ -2,7 +2,7 @@
 
 # Veri Artık Bir Dosya Değil
 
-Microsoft Purview Layered Protection ile veri hareketlerinin cihaz, tarayıcı ve ağ seviyesinde korunmasını; Endpoint DLP'den Browser Data Security'ye ve Network Data Security'ye uzanan yeni nesil veri koruma mimarisinin teknik analizi üzerinden ele alan öğrenme odaklı bir çalışma.
+Microsoft Purview Layered Protection mimarisinin veri koruma yaklaşımını detaylandırarak Endpoint DLP, Browser Data Security ve Network Data Security katmanlarının birbirini nasıl tamamladığını; verinin cihaz, tarayıcı, SaaS uygulamaları ve ağ seviyesinde nasıl keşfedildiğini, sınıflandırıldığını, denetlendiğini ve korunduğunu mimari ve operasyonel boyutlarıyla ele almaktadır.
 
 ![Microsoft Purview Layered Protection genel mimarisi](assets/architecture.svg)
 
