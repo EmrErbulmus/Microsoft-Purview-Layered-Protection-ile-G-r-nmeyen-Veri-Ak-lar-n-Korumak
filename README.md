@@ -55,7 +55,9 @@ Aynı hassas veri; kullanıcı işlemleri, tarayıcı oturumları, bulut uygulam
 
 ![Office eklentisi ve harici LLM veri akışı](assets/office-addin.svg)
 
-Bir Office eklentisi belge içeriğini arka planda harici bir API'ye gönderebilir. Bu işlem klasik bir USB kopyası değildir ve bir Edge oturumu da oluşturmayabilir. Böyle bir senaryoda desteklenen ağ yolu üzerindeki Network Data Security, sınıflandırma ve yaptırım için birincil kontrol katmanı hâline gelir.
+Bazı veri hareketleri, kullanıcı tarafından başlatılan klasik dosya işlemleri veya tarayıcı tabanlı oturumlar üzerinden gerçekleşmez. Örneğin bir Office eklentisi, Word, Excel veya Outlook içerisindeki belge içeriğini arka planda çalışan API çağrıları aracılığıyla harici bir LLM veya bulut servisine iletebilir. Bu senaryoda veri hareketi ne geleneksel bir kopyalama işlemi ne de yönetilen bir tarayıcı oturumu üzerinden gerçekleştiği için Endpoint DLP ve Browser Data Security katmanlarının görünürlüğü sınırlı kalabilir.
+
+Bu tür uygulama tabanlı veri akışlarında, trafik desteklenen bir Global Secure Access (GSA) veya SASE/SSE mimarisi üzerinden yönlendirildiğinde Network Data Security katmanı kritik bir kontrol noktası hâline gelir. Ağ seviyesinde gerçekleştirilen içerik inceleme, veri sınıflandırma ve politika değerlendirme mekanizmaları sayesinde hassas bilgiler analiz edilebilir; engelleme, denetim veya kullanıcı uyarısı gibi yaptırımlar uygulanabilir. Bu nedenle Office eklentileri tarafından oluşturulan API tabanlı veri akışlarında Network Data Security, görünürlük ve yaptırım açısından birincil koruma katmanı olarak konumlanır.
 
 ### 4. Kapsama matrisi
 
