@@ -10,7 +10,7 @@ Genel mimari; Endpoint DLP, Browser Data Security ve Network Data Security katma
 
 ## Neden bu makale?
 
-Birçok kuruluş Endpoint DLP yatırımı sonrasında veri çıkış riskinin büyük ölçüde kontrol edildiğini düşünebilir. Ancak modern veri hareketleri yalnızca USB, yazdırma veya e-posta eki üzerinden gerçekleşmez. Hassas içerik bugün aşağıdaki kanallarda da hareket edebilir:
+Birçok kurum Endpoint DLP yatırımı sonrasında veri çıkış riskinin büyük ölçüde kontrol edildiğini düşünebilir. Ancak modern veri hareketleri yalnızca USB, yazdırma veya e-posta eki üzerinden gerçekleşmez. Hassas içerik bugün aşağıdaki kanallarda da hareket edebilir:
 
 - Tüketici AI uygulamalarına yazılan veya yapıştırılan istemler
 - AI ve bulut uygulamalarına yüklenen dosyalar
